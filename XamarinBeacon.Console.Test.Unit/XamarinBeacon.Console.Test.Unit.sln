@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinBeacon.Console", "XamarinBeacon.Console\XamarinBeacon.Console.csproj", "{3F677DA2-9AE4-442B-B670-BC48981C8191}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinBeacon.Console.Test.Unit", "XamarinBeacon.Console.Test.Unit\XamarinBeacon.Console.Test.Unit.csproj", "{BD7B84FB-2485-4C90-B6C6-DC2D3AFFEC13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
