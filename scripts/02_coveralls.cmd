@@ -1,4 +1,4 @@
-pushd %1
+pushd ..\
 
 for /f %%i in ('git rev-parse HEAD') do set commit_id=%%i
 for /f %%i in ('git rev-parse --abbrev-ref HEAD') do set commit_branch=%%i

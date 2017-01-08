@@ -7,6 +7,10 @@
 <td><strong>Coverage</strong></td>
 <td><a href="https://coveralls.io/github/anderson-rancan/XamarinBeacon?branch=master"><img src="https://coveralls.io/repos/github/anderson-rancan/XamarinBeacon/badge.svg?branch=master" alt="Coveralls"></a>
 </td>
+</tr>
+<td><strong>Quality</strong></td>
+<td><a href="https://sonarqube.com/dashboard/index?id=XamarinBeacon"><img src="https://sonarqube.com/api/badges/gate?key=XamarinBeacon"></a> <a href="https://sonarqube.com/dashboard/index?id=XamarinBeacon"><img src="https://sonarqube.com/api/badges/measure?key=XamarinBeacon&metric=code_smells"></a>
+</td>
 </tbody></table>
 
 ## XamarinBeacon
