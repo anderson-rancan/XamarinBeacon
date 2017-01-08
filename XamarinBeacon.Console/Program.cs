@@ -1,10 +1,16 @@
-﻿namespace XamarinBeacon.Console
+﻿using XamarinBeacon.Beacon;
+
+namespace XamarinBeacon.Console
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
+            var worker = new BeaconManager();
+            worker.StartWatching();
+
             System.Console.WriteLine("Application started");
+            System.Console.ReadKey();
         }
     }
 }
