@@ -1,2 +1,21 @@
 language: csharp
 solution: XamarinBeacon.sln
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "NPjRCZBoeFodD3HFF5T/us7OBwsqJSvR4KCEInCrH5xalwOLVxw1oOPmBDXHxX9rQUM31QdLQRQI76J43R+RqUxrorTgpdAqM5wejcE+uswVgbCQbXX/Eas1UrkbDhdqBO9t/ssgsctNgc8YlXS7xPt8qevCtcEFLqLeyl8+1udFwtpHISkrBfXNaq1KDvP08yVJ2X/bjO3QoWHeDKrONsrvQYn6AsIwkAU1vfRVLQ1bAq2Qp8OmCZmrCrSBynI03li9aUOAJn1qpvtWCe93hMwP5XEVVfuOR+6k87/9XcksYvR5Zx95nwFJWBfrgKsJgDUAAykMXfx9F/Dfrf5jpPSE7/Tx7YVxjGU+U7OqPa2lfiAvV4eND1WRlL4IdosYxBIU0WwqxIh4dSlO/ekOJe7gccrv4xGGgF7npz09TPpZgBg37wThVkAYTRolt2aPjacPRNPtm+UmcCciX58Kw7lkSnJSM0eEtO1x91MDMMCFfc5z9R0Rd/f3WQuoMbpxWDKLNC4gI/B8QrJvzeHfa8jjkdGv0xWmcTP5xPh7aO5veRyqZq6w6kfgaESv+Mem8Dwq4ZJGpbKatCX07qQmJHXbhiKAkb2f8L6KH9PZ1VeSQY0XK6aTRj2qs6oF+dweEs17y+Mnfq7xceCGc6arYEXpQdd7cwVGzcpICsO5O1s="
+
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "anderson-rancan/XamarinBeacon"
+      description: "Build submitted via Travis CI"
+    notification_email: anderson.rancan@gmail.com
+    build_command_prepend: "msbuild /t:Clean"
+    build_command:   "msbuild /t:Rebuild"
+    branch_pattern: master
