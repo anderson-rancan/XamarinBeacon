@@ -9,7 +9,7 @@
 </td>
 </tr>
 <td><strong>Quality</strong></td>
-<td><a href="https://sonarqube.com/dashboard/index?id=XamarinBeacon"><img src="https://sonarqube.com/api/badges/gate?key=XamarinBeacon"></a> <a href="https://sonarqube.com/dashboard/index?id=XamarinBeacon"><img src="https://sonarqube.com/api/badges/measure?key=XamarinBeacon&metric=code_smells"></a>
+<td><a href="https://sonarqube.com/dashboard/index?id=XamarinBeacon"><img src="https://sonarqube.com/api/badges/gate?key=XamarinBeacon" alt="SonarQube quality gate"></a> <a href="https://sonarqube.com/dashboard/index?id=XamarinBeacon"><img src="https://sonarqube.com/api/badges/measure?key=XamarinBeacon&metric=code_smells" alt=""SonarQube code smells></a>
 </td>
 </tbody></table>
 
