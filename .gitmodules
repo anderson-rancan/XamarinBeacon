@@ -1,0 +1,4 @@
+[submodule "universal-beacon"]
+	path = universal-beacon
+	url = https://github.com/anderson-rancan/universal-beacon.git
+	branch = master
