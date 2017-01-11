@@ -1,4 +1,7 @@
 ﻿using NUnit.Framework;
+using System;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace XamarinBeacon.Console.Test.Unit
 {
@@ -8,7 +11,7 @@ namespace XamarinBeacon.Console.Test.Unit
         [Test]
         public void Main_ShouldNotThrowExceptions()
         {
-            Assert.DoesNotThrow(() => Program.Main(null));
+            Assert.DoesNotThrow(() => Task.Factory.StartNew(() => Program.Main(null)));
         }
     }
 }

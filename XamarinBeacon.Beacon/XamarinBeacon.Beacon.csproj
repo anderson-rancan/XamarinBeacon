@@ -43,19 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Beacon.cs" />
-    <Compile Include="BeaconException.cs" />
-    <Compile Include="BeaconFrameBase.cs" />
-    <Compile Include="BeaconFrameHelper.cs" />
-    <Compile Include="BeaconType.cs" />
-    <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="BeaconManager.cs" />
+    <Compile Include="IBeaconFrame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProximityBeaconFrame.cs" />
-    <Compile Include="TlmEddystoneFrame.cs" />
-    <Compile Include="UidEddystoneFrame.cs" />
-    <Compile Include="UnknownBeaconFrame.cs" />
-    <Compile Include="UrlEddystoneFrame.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Properties\Annotations.cs">
+      <Link>Properties\Annotations.cs</Link>
+    </Compile>
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\KnownManufacturers.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\Beacon.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\BeaconException.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\BeaconFrameBase.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\BeaconFrameHelper.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\BeaconManager.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\ProximityBeaconFrame.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\TlmEddystoneFrame.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\UidEddystoneFrame.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\UnknownBeaconFrame.cs" />
+    <Compile Include="C:\Users\aranc\Documents\Visual Studio 2015\Projects\XamarinBeacon\universal-beacon\UniversalBeaconLibrary\Beacon\UrlEddystoneFrame.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
