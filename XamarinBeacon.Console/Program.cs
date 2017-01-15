@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UniversalBeaconLibrary.Beacon;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using Windows.Devices.Enumeration;
+using XamarinBeacon.Beacon;
 using static System.Console;
 
 namespace XamarinBeacon.Console
 {
     public static class Program
     {
+        private static DeviceWatcher _deviceWatcher;
         private readonly static BeaconManager _beaconManager = new BeaconManager();
         private readonly static BluetoothLEAdvertisementWatcher _watcher = new BluetoothLEAdvertisementWatcher { ScanningMode = BluetoothLEScanningMode.Active };
 
@@ -17,7 +23,11 @@ namespace XamarinBeacon.Console
             _watcher.Stopped += WatcherOnStopped;
             _watcher.Start();
 
-            var timer = new System.Threading.Timer(Refresh, null, 1000, 1000);
+            _deviceWatcher = DeviceInformation.CreateWatcher();
+            _deviceWatcher.Added += DeviceAdded;
+            _deviceWatcher.Updated += DeviceUpdated;
+
+             var timer = new System.Threading.Timer(Refresh, null, 1000, 1000);
 
             ReadKey();
 
@@ -36,27 +46,24 @@ namespace XamarinBeacon.Console
 
                 foreach (var frame in beacon.BeaconFrames)
                 {
-                    WriteLine("---- frame ----");
+                    WriteLine("---- {0} ----", frame.GetType().Name);
 
                     if (frame is UidEddystoneFrame)
                     {
                         var uidEddystoneFrame = frame as UidEddystoneFrame;
 
-                        WriteLine("Eddystone UID Frame");
                         WriteLine("ID: {0:X} / {1:X}", uidEddystoneFrame.NamespaceIdAsNumber, uidEddystoneFrame.InstanceIdAsNumber);
                     }
                     else if (frame is UrlEddystoneFrame)
                     {
                         var urlEddystoneFrame = frame as UrlEddystoneFrame;
 
-                        WriteLine("Eddystone URL Frame");
                         WriteLine("URL: {0}", urlEddystoneFrame.CompleteUrl);
                     }
                     else if (frame is TlmEddystoneFrame)
                     {
                         var tlmEddystoneFrame = frame as TlmEddystoneFrame;
 
-                        WriteLine("Eddystone Telemetry Frame");
                         WriteLine("Temperature {0}°C", tlmEddystoneFrame.TemperatureInC);
                         WriteLine("Battery: {0}mV", tlmEddystoneFrame.BatteryInMilliV);
                     }
@@ -64,18 +71,23 @@ namespace XamarinBeacon.Console
                     {
                         var proximityBeaconFrame = frame as ProximityBeaconFrame;
 
-                        WriteLine("Proximity beacon frame");
                         WriteLine("Major: {0} / Minor: {1}", proximityBeaconFrame.MajorAsString, proximityBeaconFrame.MinorAsString);
                         WriteLine("TxPower: " + proximityBeaconFrame.TxPower);
-                        WriteLine("Uuid: " + proximityBeaconFrame.UuidAsString);
-                        WriteLine("Payload: " + BitConverter.ToString(proximityBeaconFrame.Payload));
+                        WriteLine("Uuid: " + proximityBeaconFrame.UuidAsString.ToUpperInvariant());
                     }
-                    else if (frame is IBeaconFrame)
+                    else if (frame is AxaBatTempHumFrame)
                     {
-                        var iBeaconFrame = frame as IBeaconFrame;
+                        var axaBeaconFrame = frame as AxaBatTempHumFrame;
 
-                        WriteLine("iBeacon frame");
-                        WriteLine("Complete local name: {0}", iBeaconFrame.CompleteLocalName);
+                        WriteLine("Battery: {0} %", axaBeaconFrame.Battery);
+                        WriteLine("Temperature: {0} °C", axaBeaconFrame.Temperature);
+                        WriteLine("Humidity: {0} %", axaBeaconFrame.Humidity);
+                    }
+                    else if (frame is AxaCompleteNameFrame)
+                    {
+                        var axaCompleteNameFrame = frame as AxaCompleteNameFrame;
+
+                        WriteLine("Complete name: {0}", axaCompleteNameFrame.CompleteName);
                     }
                     else
                     {
@@ -90,7 +102,62 @@ namespace XamarinBeacon.Console
 
         private static void WatcherOnReceived(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
         {
+            /*
+            var address = string.Join("-", BitConverter.GetBytes(args.BluetoothAddress).Reverse().Select(b => b.ToString("X2"))).Substring(6);
+
+            using (var writer = new System.IO.StreamWriter("C:\\Users\\aranc\\Documents\\" + address + ".txt", true))
+            {
+                writer.WriteLine(new string('-', 20));
+
+                writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.BluetoothAddress: {0}", args.BluetoothAddress);
+                writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.Timestamp: {0}", args.Timestamp);
+                writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.RawSignalStrengthInDBm", args.RawSignalStrengthInDBm);
+                writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.AdvertisementType", args.AdvertisementType);
+                writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.BluetoothLEAdvertisement");
+
+                writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.BluetoothLEAdvertisement.LocalName: {0}", args.Advertisement.LocalName);
+                if (args.Advertisement.Flags.HasValue) writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.BluetoothLEAdvertisement.Flags: {0}", args.Advertisement.Flags.Value);
+
+                for (int i = 0; i < args.Advertisement.DataSections.Count; i++)
+                {
+                    writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.BluetoothLEAdvertisement.DataSections[{0}].DataType: {1}", i, args.Advertisement.DataSections[i].DataType);
+                    writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.BluetoothLEAdvertisement.DataSections[{0}].Data: {1}", i, string.Join("-", args.Advertisement.DataSections[i].Data.ToArray()));
+                }
+
+                for (int i = 0; i < args.Advertisement.ManufacturerData.Count; i++)
+                {
+                    writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.BluetoothLEAdvertisement.ManufacturerData[{0}].CompanyId: {1}", i, args.Advertisement.ManufacturerData[i].CompanyId);
+                    writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.BluetoothLEAdvertisement.ManufacturerData[{0}].DataType: {1}", i, string.Join("-", args.Advertisement.ManufacturerData[i].Data.ToArray()));
+                }
+
+                for (int i = 0; i < args.Advertisement.ServiceUuids.Count; i++)
+                {
+                    writer.WriteLine("BluetoothLEAdvertisementReceivedEventArgs.BluetoothLEAdvertisement.ServiceUuids[{0}]: {1}", i, args.Advertisement.ServiceUuids[i].ToString());
+                }
+
+                writer.WriteLine(new string('-', 20));
+            }
+            */
+
             _beaconManager.ReceivedAdvertisement(args);
+        }
+
+        private static async void DeviceAdded(DeviceWatcher watcher, DeviceInformation device)
+        {
+            try
+            {
+                var service = await GattDeviceService.FromIdAsync(device.Id);
+                WriteLine("Opened Service!!");
+            }
+            catch
+            {
+                WriteLine("Failed to open service.");
+            }
+        }
+
+        private static void DeviceUpdated(DeviceWatcher watcher, DeviceInformationUpdate update)
+        {
+            WriteLine($"Device updated: {update.Id}");
         }
 
         private static void WatcherOnStopped(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementWatcherStoppedEventArgs args)
